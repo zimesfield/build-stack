@@ -1,8 +1,8 @@
 
 dev:
 	@echo "Provisioning build stack on dev stage'"
-	terraform workspace select dev
 	terraform init
+	terraform workspace select dev
 	terraform fmt -check
 	terraform validate
 	terraform plan -var-file="environment/dev/terraform.tfvars"
