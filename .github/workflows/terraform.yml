@@ -82,6 +82,7 @@ jobs:
 
     - name: Create tfvars file
       run: |
+        mkdir ~/.kube
         echo '${{ secrets.KUBE_CONFIG }}' >> ~/.kube/config
         echo '${{ secrets.TF_TERRAFORM_VARS }}' >> terraform.tfvars
 
