@@ -2,38 +2,38 @@ terraform {
   required_version = ">= 1.0"
   required_providers {
     helm = {
-      source = "hashicorp/helm"
+      source  = "hashicorp/helm"
       version = "2.11.0"
     }
     kubernetes = {
-      source = "hashicorp/kubernetes"
-      version = "2.23.0"
+      source  = "hashicorp/kubernetes"
+      version = "2.24.0"
     }
     keycloak = {
       source  = "mrparkers/keycloak"
       version = "4.3.1"
     }
-#    aiven = {
-#      source  = "aiven/aiven"
-#      version = "4.9.3"
-#    }
+    #    aiven = {
+    #      source  = "aiven/aiven"
+    #      version = "4.9.3"
+    #    }
   }
 }
 
 locals {
-  config_path = "~/.kube/config"
-  config_context = "minikube"
+  config_path    = var.kube_config_path
+  config_context = var.config
 }
 
 provider "kubernetes" {
-  config_path = local.config_path
+  config_path    = local.config_path
   config_context = local.config_context
 }
 
 provider "helm" {
   kubernetes {
-    config_path             = local.config_path
-    config_context          = local.config_context
+    config_path    = local.config_path
+    config_context = local.config_context
   }
 }
 
