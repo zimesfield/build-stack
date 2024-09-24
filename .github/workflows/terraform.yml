@@ -47,7 +47,7 @@ jobs:
       run: |
         mkdir ~/.kube
         echo '${{ secrets.KUBE_CONFIG }}' >> ~/.kube/config
-        echo '${{ secrets.TF_TERRAFORM_VARS }}' >> terraform.tfvars
+        echo '${{ secrets.TF_TERRAFORM_VARS }}' >> environment/dev/terraform.tfvars
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
