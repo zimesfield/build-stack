@@ -1,3 +1,9 @@
+
+variable "token" {
+  description = "The name of the Kubernetes namespace"
+  type        = string
+}
+
 variable "config" {
   description = "the context to run on"
 }
@@ -33,6 +39,10 @@ variable "keycloak_database_username" {
 
 variable "keycloak_database_password" {
   description = "the keycloak database password"
+}
+
+variable "terraform_env_state_file" {
+  description = "terraform state file path"
 }
 
 
