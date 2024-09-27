@@ -1,6 +1,10 @@
-
 variable "token" {
   description = "The name of the Kubernetes namespace"
+  type        = string
+}
+
+variable "region" {
+  description = "Server region"
   type        = string
 }
 
@@ -41,32 +45,14 @@ variable "keycloak_database_password" {
   description = "the keycloak database password"
 }
 
-variable "terraform_env_state_file" {
-  description = "terraform state file path"
+
+variable "bucket_access_key" {
+  description = "storage access key"
+}
+variable "bucket_secret_key" {
+  description = "storage secret key"
 }
 
-
-
-#
-#
-#
-# variable "keycloak_db_user" {
-#   description = "the keycloak database username"
-#   default     = "raeda-keycloak"
-# }
-#
-# variable "keycloak_db_password" {
-#   description = "the keycloak database password"
-#   sensitive   = true
-# }
-#
-# variable "keycloak_db_name" {
-#   description = "the keycloak database name"
-#   default     = "keycloak"
-# }
-#
-
-#
-# variable "k8s_config_file" {
-#   description = "kube config location"
-# }
+variable "bucket_label" {
+  description = "The bucket id for storage. (required)"
+}

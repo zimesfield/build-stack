@@ -50,6 +50,7 @@ jobs:
         mkdir environment/dev
         echo '${{ secrets.KUBE_CONFIG }}' >> ~/.kube/config
         echo '${{ secrets.TF_TERRAFORM_VARS }}' >> environment/dev/terraform.tfvars
+        echo '${{ secrets.TF_TERRAFORM_BACKEND }}' >> backend.tf
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'

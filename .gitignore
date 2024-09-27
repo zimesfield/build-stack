@@ -11,6 +11,10 @@
 *.tfstate
 *.tfstate.*
 
+# Banckend
+backend
+backend.tf
+
 # Crash log files
 crash.log
 crash.*.log

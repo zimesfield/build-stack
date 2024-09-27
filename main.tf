@@ -1,5 +1,5 @@
 module "keycloak-database" {
-  source         = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/postgres?ref=v0.1.7"
+  source         = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/postgres?ref=v0.1.9"
   namespace_name = "keycloak"
   chart_name     = "postgresql"
   app_name       = "keycloak-database"
@@ -10,7 +10,7 @@ module "keycloak-database" {
 }
 
 module "keycloak-server" {
-  source             = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/keycloak?ref=v0.1.7"
+  source             = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/keycloak?ref=v0.1.9"
   depends_on         = [module.keycloak-database]
   namespace          = "keycloak"
   chart              = "keycloak"
@@ -27,14 +27,64 @@ module "keycloak-server" {
 }
 
 
-
-#provider "keycloak" {
-#  client_id = "master-realm"
-#  url       = "https://${module.keycloak-server.keycloak_host}"
-#  client_secret = "admin2"
-#}
+# resource "kubernetes_namespace" "istio_system" {
+#   metadata {
+#     name = "istio-system"
+#   }
+# }
 #
-#module "build_stack" {
-#  source                    = "./modules"
-#  account_name              = "local"
-#}
+# # Istio Gateway
+# resource "kubernetes_manifest" "istio_gateway" {
+#   manifest = {
+#     apiVersion = "networking.istio.io/v1alpha3"
+#     kind       = "Gateway"
+#     metadata = {
+#       name      = "keycloak-gateway"
+#       namespace = "default"
+#     }
+#     spec = {
+#       selector = {
+#         istio = "ingressgateway"
+#       }
+#       servers = [{
+#         port = {
+#           number   = 80
+#           name     = "http"
+#           protocol = "HTTP"
+#         }
+#         hosts = ["*"]
+#       }]
+#     }
+#   }
+# }
+#
+# # Istio Virtual Service
+# resource "kubernetes_manifest" "istio_virtual_service" {
+#   manifest = {
+#     apiVersion = "networking.istio.io/v1alpha3"
+#     kind       = "VirtualService"
+#     metadata = {
+#       name      = "keycloak-vs"
+#       namespace = "default"
+#     }
+#     spec = {
+#       hosts = ["*"]
+#       gateways = ["keycloak-gateway"]
+#       http = [{
+#         match = [{
+#           uri = {
+#             prefix = "/"
+#           }
+#         }]
+#         route = [{
+#           destination = {
+#             host = "keycloak.default.svc.cluster.local"
+#             port = {
+#               number = 8080
+#             }
+#           }
+#         }]
+#       }]
+#     }
+#   }
+# }
