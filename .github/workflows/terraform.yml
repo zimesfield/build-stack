@@ -18,7 +18,7 @@ jobs:
     # Environment variables for Terraform version and working directory
     env:
       TF_VERSION: v1.9.6  # Specify the Terraform version here
-#      TF_WORKING_DIR: ./terraform  # Directory where your Terraform files are stored
+    #      TF_WORKING_DIR: ./terraform  # Directory where your Terraform files are stored
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -26,35 +26,50 @@ jobs:
         shell: bash
 
     steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v4
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
 
-      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-    - name: Set up SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - name: Create tfvars file
-      run: |
-        mkdir ~/.kube
-        mkdir environment
-        mkdir environment/dev
-        echo '${{ secrets.KUBE_CONFIG }}' >> ~/.kube/config
-        echo '${{ secrets.TF_TERRAFORM_VARS }}' >> environment/dev/terraform.tfvars
-        echo '${{ secrets.TF_TERRAFORM_BACKEND }}' >> backend.tf
+      - name: Create tfvars file
+        run: |
+          mkdir -p ~/.kube
+          rm -rf .terraform
+          rm -rf environment && mkdir environment
+          rm -rf backend
+          mkdir -p environment/dev
+          echo '${{ secrets.KUBE_CONFIG }}' >> ~/.kube/config
+          echo '${{ secrets.TF_TERRAFORM_VARS }}' >> environment/dev/terraform.tfvars
+          echo '${{ secrets.TF_TERRAFORM_BACKEND }}' >> backend
 
-    - name: Terraform Apply
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-#      working-directory: ${{ env.TF_WORKING_DIR }}
-      env:
-        TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-      run: make dev
+      - name: Terraform init
+        run: make init
+
+      - name: Terraform validate
+        run: make validate
+
+      - name: Terraform plan
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+        run: make plan
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+        run: make apply
