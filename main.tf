@@ -1,5 +1,5 @@
 module "keycloak-database" {
-  source         = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/postgres?ref=v0.1.9"
+  source         = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/postgres?ref=v0.2.0"
   namespace_name = "keycloak"
   chart_name     = "postgresql"
   app_name       = "keycloak-database"
@@ -10,7 +10,7 @@ module "keycloak-database" {
 }
 
 module "keycloak-server" {
-  source             = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/keycloak?ref=v0.1.9"
+  source             = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/keycloak?ref=v0.2.0"
   depends_on         = [module.keycloak-database]
   namespace          = "keycloak"
   chart              = "keycloak"
