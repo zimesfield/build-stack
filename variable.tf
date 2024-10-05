@@ -3,6 +3,11 @@ variable "token" {
   type        = string
 }
 
+variable "bucket" {
+  description = "The name bucket file path"
+  type        = string
+}
+
 variable "region" {
   description = "Server region"
   type        = string

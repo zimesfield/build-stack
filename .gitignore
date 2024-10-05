@@ -12,7 +12,7 @@
 *.tfstate.*
 
 # Banckend
-backend
+environment/dev/backend
 backend.tf
 
 # Crash log files

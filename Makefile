@@ -9,30 +9,36 @@ workspace:
 
 
 # Target to initialize Terraform
-init:
-	terraform init -migrate-state -var-file="environment/dev/terraform.tfvars"
+init: workspace
+	terraform init -migrate-state -input=false -var-file="environment/dev/terraform.tfvars"
+
 # Create backend for terraform
 backend: init
-	cat backend > backend.tf
+	cat environment/dev/backend > backend.tf
 
 # Validate terraform script
-validate: backend
+validate: environment/dev/backend
 	terraform fmt -check
 	terraform validate
 
+
+# Target to plan Terraform changes
+plan: backend
+	terraform init -migrate-state -input=false -var-file="environment/dev/terraform.tfvars"
+	terraform plan -var-file="environment/dev/terraform.tfvars"
+
 # Target to apply Terraform configuration
-apply: init
+apply: plan
 	terraform apply -auto-approve -var-file="environment/dev/terraform.tfvars"
 
 # Target to destroy resources in the selected workspace
 destroy:
 	terraform destroy -auto-approve -var-file="environment/dev/terraform.tfvars"
 
-# Target to plan Terraform changes
-plan: init
-	terraform plan -var-file="environment/dev/terraform.tfvars"
+local: backend init validate plan
+	@echo "Provisioning build stack on dev stage'"
 
-dev: init validate apply
+dev: apply
 	@echo "Provisioning build stack on dev stage'"
 
 prod:

@@ -54,13 +54,10 @@ jobs:
           mkdir -p environment/dev
           echo '${{ secrets.KUBE_CONFIG }}' >> ~/.kube/config
           echo '${{ secrets.TF_TERRAFORM_VARS }}' >> environment/dev/terraform.tfvars
-          echo '${{ secrets.TF_TERRAFORM_BACKEND }}' >> backend
+          echo '${{ secrets.TF_TERRAFORM_BACKEND }}' >> environment/dev/backend
 
       - name: Terraform init
         run: make init
-
-      - name: Terraform validate
-        run: make validate
 
       - name: Terraform plan
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -72,4 +69,4 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
           TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-        run: make apply
+        run: make dev
