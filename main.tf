@@ -1,5 +1,5 @@
 module "keycloak-database" {
-  source         = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/postgres?ref=v0.2.0"
+  source         = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/postgres?ref=v0.2.1"
   namespace_name = "keycloak"
   chart_name     = "postgresql"
   app_name       = "keycloak-database"
@@ -10,7 +10,7 @@ module "keycloak-database" {
 }
 
 module "keycloak-server" {
-  source             = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/keycloak?ref=v0.2.0"
+  source             = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/keycloak?ref=v0.2.1"
   depends_on         = [module.keycloak-database]
   namespace          = "keycloak"
   chart              = "keycloak"
@@ -28,7 +28,7 @@ module "keycloak-server" {
 
 
 module "terraform-state" {
-  source             = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/storage?ref=v0.2.0"
+  source             = "git::git@github.com:zimesfield/infrastructure-stack.git//modules/storage?ref=v0.2.1"
 
   file_path            = var.bucket
   object_storage_key   = "terraform-state"
