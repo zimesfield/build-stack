@@ -1,25 +1,14 @@
-variable "token" {
-  description = "The name of the Kubernetes namespace"
-  type        = string
-}
-
-variable "bucket" {
-  description = "The name bucket file path"
-  type        = string
-}
-
-variable "region" {
-  description = "Server region"
-  type        = string
-}
-
 variable "config" {
   description = "the context to run on"
 }
 
-
 variable "kube_config_path" {
   description = "the kube config location"
+}
+
+variable "namespace" {
+  description = "namespace for deployment"
+  default = "raeda"
 }
 
 variable "keycloak_admin_username" {
@@ -31,33 +20,56 @@ variable "keycloak_admin_password" {
   sensitive   = true
 }
 
+variable "keycloak_database_url" {
+  description = "the keycloak database url"
+}
+
+variable "database_password" {
+  description = "the keycloak database url"
+  sensitive = true
+}
+
+variable "keycloak_database_port" {
+  description = "the keycloak database port"
+}
+
+variable "database_username" {
+  description = "the database username"
+}
+
+
+variable "keycloak_docker_image" {
+  default = "zimesfield/keycloak:0.0.1"
+}
+
+variable "container_name" {
+  default = "keycloak"
+}
+
 variable "keycloak_port" {
-  description = "the keycloak port"
+  default = 8080
+}
+
+variable "extra_debug_args" {
+  default = "-p 5005:5005 -e JAVA_TOOL_OPTIONS=\"-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n\""
+}
+
+variable "delivery_database_url" {
+  description = "delivery database url"
+}
+
+variable "delivery_docker_image" {
+  description = "delivery docker image version"
+}
+
+variable "keycloak_url" {
+  description = "delivery keycloak url"
+}
+
+variable "graphql_docker_image" {
+  description = "delivery docker image version"
 }
 
 
-variable "keycloak_database" {
-  description = "the keycloak database name"
-}
 
 
-variable "keycloak_database_username" {
-  description = "the keycloak database username"
-}
-
-
-variable "keycloak_database_password" {
-  description = "the keycloak database password"
-}
-
-
-variable "bucket_access_key" {
-  description = "storage access key"
-}
-variable "bucket_secret_key" {
-  description = "storage secret key"
-}
-
-variable "bucket_label" {
-  description = "The bucket id for storage. (required)"
-}

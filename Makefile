@@ -23,12 +23,12 @@ validate: environment/dev/backend
 
 
 # Target to plan Terraform changes
-plan: backend
+plan: workspace backend
 	terraform init -migrate-state -input=false -var-file="environment/dev/terraform.tfvars"
 	terraform plan -var-file="environment/dev/terraform.tfvars"
 
 # Target to apply Terraform configuration
-apply: plan
+apply:
 	terraform apply -auto-approve -var-file="environment/dev/terraform.tfvars"
 
 # Target to destroy resources in the selected workspace
@@ -36,13 +36,13 @@ destroy:
 	terraform destroy -auto-approve -var-file="environment/dev/terraform.tfvars"
 
 local: backend init validate plan
-	@echo "Provisioning build stack on dev stage'"
+	@echo "Provisioning build stack on dev stage"
 
 dev: apply
-	@echo "Provisioning build stack on dev stage'"
+	@echo "Provisioning build stack on dev stage"
 
 prod:
-	@echo "Provisioning build stack on dev stage'"
+	@echo "Provisioning build stack on dev stage"
 	terraform workspace select prod
 	terraform plan -var-file="environment/prod/terraform.tfvars"
 

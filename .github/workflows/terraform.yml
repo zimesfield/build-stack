@@ -56,6 +56,9 @@ jobs:
           echo '${{ secrets.TF_TERRAFORM_VARS }}' >> environment/dev/terraform.tfvars
           echo '${{ secrets.TF_TERRAFORM_BACKEND }}' >> environment/dev/backend
 
+      - name: Init
+        run: terraform init
+
       - name: Terraform init
         run: make init
 
