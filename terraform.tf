@@ -3,7 +3,7 @@ terraform {
   required_providers {
     linode = {
       source  = "linode/linode"
-      version = "2.29.0"
+      version = "4.5.0"
     }
     helm = {
       source  = "hashicorp/helm"
